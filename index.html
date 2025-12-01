@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>k12</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #000000;
+      color: #e20a0a;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin: 40px 0 24px;
+      font-size: 2.5em;
+      letter-spacing: 2px;
+    }
+    .games-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+    .game-card {
+      background: #333;
+      border-radius: 10px;
+      padding: 18px 28px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
+      width: 100%;
+      transition: transform 0.1s;
+      cursor: pointer;
+      text-align: center;
+    }
+    .game-card:hover {
+      transform: translateY(-2px) scale(1.02);
+      background: #444;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.88);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal.open {
+      display: flex;
+    }
+    .modal-content {
+      background: #181818;
+      border-radius: 8px;
+      padding: 0;
+      box-shadow: 0 0 28px rgba(0,0,0,0.7);
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .modal-header {
+      padding: 12px 24px;
+      font-size: 1.3em;
+      background: #222;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .close-btn, .fullscreen-btn {
+      cursor: pointer;
+      background: #e54b4b;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      width: 28px;
+      height: 28px;
+      font-size: 1.2em;
+      line-height: 28px;
+      text-align: center;
+      margin-left: 4px;
+      transition: background 0.2s;
+      outline: none;
+    }
+    .fullscreen-btn {
+      background: #4788ff;
+    }
+    .close-btn:hover, .fullscreen-btn:hover {
+      background: #ff6565;
+    }
+    .fullscreen-btn:hover {
+      background: #5ba5ff;
+    }
+    .modal-iframe {
+      width: 80vw;
+      height: 75vh;
+      border: none;
+      background: #000;
+      display: block;
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .modal-iframe {width: 98vw; height: 60vh;}
+    }
+  </style>
+</head>
+<body>
+  <h1>ixl hub</h1>
+  <h1>made by charlie cheatham</h1>
+  <div class="games-list">
+    <div class="game-card" onclick="openModal('fearstofathom.html', 'Fears To Fathom: Home Alone')">
+      Fears To Fathom: Home Alone
+    </div>
+    <div class="game-card" onclick="openModal('zeldamajorasmask.html', 'Legend of Zelda: Majora\'s Mask')">
+      Legend of Zelda: Majora's Mask
+    </div>
+    <div class="game-card" onclick="openModal('hollowknight.html', 'Hollow Knight')">
+      Hollow Knight
+    </div>
+    <div class="game-card" onclick="openModal('retrobowlcollege.html', 'Retro Bowl College')">
+      Retro Bowl College
+    </div>
+    <div class="game-card" onclick="openModal('waroftheknights.html', 'War Of The Knights')">
+      War Of The Knights
+    </div>
+    <div class="game-card" onclick="openModal('residentevil2.html', 'Resident Evil 2')">
+      Resident Evil 2
+    </div>
+    <div class="game-card" onclick="openModal('bloodmoney.html', 'Blood Money')">
+      Blood Money
+    </div>
+    <div class="game-card" onclick="openModal('undertale.html', 'Undertale')">
+      Undertale
+    </div>
+    <div class="game-card" onclick="openModal('clash.html', 'Clash of Vikings')">
+      Clash of Viking
+    </div>
+    <div class="game-card" onclick="openModal('gettingoverit.html', 'Getting Over It')">
+      Getting Over It
+      </div>
+      <div class="game-card" onclick="openModal('slenderman.html', 'slenderman')">
+     slenderman
+      </div>
+      <div class="game-card" onclick="openModal('Portal.html', 'portal')">
+     portal
+      </div>
+     <div class="game-card" onclick="openModal('call of duty.html', 'call of duty')">
+     call of duty
+      </div>
+       <div class="game-card" onclick="openModal('get yoked.html', 'get yoked')">
+     get yoked
+      </div>
+  </div>
+  <!-- Modal window for game loading -->
+  <div class="modal" id="gameModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="modalTitle"></span>
+        <button class="fullscreen-btn" onclick="fullscreenGame()" title="Fullscreen">⛶</button>
+        <button class="close-btn" onclick="closeModal()" title="Close">×</button>
+      </div>
+      <iframe id="gameFrame" class="modal-iframe" src=""></iframe>
+    </div>
+  </div>
+  
+  <script>
+    function openModal(gameFile, gameTitle) {
+      document.getElementById('modalTitle').textContent = gameTitle;
+      document.getElementById('gameFrame').src = gameFile;
+      document.getElementById('gameModal').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('gameModal').classList.remove('open');
+      document.getElementById('gameFrame').src = '';
+      // If we're in fullscreen, exit fullscreen as well
+      if (document.fullscreenElement) document.exitFullscreen();
+    }
+    function fullscreenGame() {
+      var iframe = document.getElementById('gameFrame');
+      // Use the iframe for fullscreen. If not supported, fallback to modal.
+      if (iframe.requestFullscreen) {
+        iframe.requestFullscreen();
+      } else if (iframe.webkitRequestFullscreen) {
+        iframe.webkitRequestFullscreen();
+      } else if (iframe.mozRequestFullScreen) {
+        iframe.mozRequestFullScreen();
+      } else if (iframe.msRequestFullscreen) {
+        iframe.msRequestFullscreen();
+      } else {
+        // fallback: fullscreen the modal
+        var modal = document.getElementById('gameModal');
+        if (modal.requestFullscreen) modal.requestFullscreen();
+      }
+    }
+    // Close modal on Escape key & exit fullscreen
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        // If fullscreen, exit fullscreen first
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+        closeModal();
+      }
+    });
+
+    // When fullscreen mode is exited, keep modal open
+    document.addEventListener('fullscreenchange', function() {
+      // If no longer fullscreen, do nothing (modal stays open).
+    });
+  </script>
+</body>
+</html>
